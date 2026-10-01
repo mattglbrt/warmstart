@@ -1,6 +1,8 @@
-# orient/wrap
+# warmstart
 
-A session system for [Claude Code](https://claude.com/claude-code). It uses two slash commands and three files, so every session starts knowing where the project is and ends leaving it better documented than it found it.
+**Every Claude Code session picks up exactly where the last one left off.**
+
+A session system for [Claude Code](https://claude.com/claude-code). It uses two slash commands (`/orient`, `/wrap`) and three plain markdown files, so every session starts knowing where the project is and ends leaving it better documented than it found it. It needs no API key, no service, and no setup beyond copying a few files.
 
 ```
 /orient   →   work   →   /wrap
@@ -46,8 +48,8 @@ It ends by handing you the ranked Next list.
 Requires bash: macOS, Linux, WSL, or Git Bash on Windows.
 
 ```bash
-git clone https://github.com/<you>/orient-wrap.git
-cd orient-wrap
+git clone https://github.com/mattglbrt/warmstart.git
+cd warmstart
 
 # Set up a project (creates CLAUDE.md, STATUS.md, SESSION_LOG.md, .claude/commands/{orient,wrap}.md)
 bash install.sh ~/code/my-project "My Project"
@@ -133,6 +135,8 @@ PLAYBOOK.md            the full system
 **Does this need an API key or any service?** No. It's markdown files and slash commands, and it runs on whatever Claude Code plan you already have.
 
 **Why not just use Claude Code's memory / `--continue`?** Use those too. They remember *conversations*. This remembers the *project*, in plain files that live in the repo, diff in git, survive a switch between machines, and are readable by teammates and future you without opening Claude at all.
+
+**Does it work across accounts, teammates, or other AI tools?** Yes. The state lives in plain files in the repo, not in anyone's Claude account. Anyone on any Claude Code plan who clones the repo gets the same warm start. Other agents (Cursor, Codex, and so on) can follow it too: the commands are just prompts, and STATUS.md is readable by anything. The one rule is **one active session per project at a time, and wrap before you hand off.** Two sessions rewriting the same STATUS.md at once will collide. Git flags it as a conflict, but it's easier to avoid. If you want to leave a note for whoever works next, write a `HANDOFF.md`.
 
 **Should STATUS.md and SESSION_LOG.md be committed?** Usually yes. They're the project's working memory, and git history on STATUS.md is a nice timeline. Skip it for a repo where internal notes shouldn't be public.
 

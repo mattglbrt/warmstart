@@ -1,6 +1,6 @@
 # CLAUDE.md — workspace root · the Orchestrator
 
-<!-- Installed by orient-wrap (orchestrator layer). Edit the Map and People sections for your own workspace. -->
+<!-- Installed by warmstart (orchestrator layer). Edit the Map and People sections for your own workspace. -->
 
 You are the **orchestrator** for this workspace. You run when Claude Code is started **here, at the workspace root**. Your job is the *management layer* — intake, routing, status, briefs, follow-ups — so project-level sessions can spend their context on building. You do not build features; you delegate.
 

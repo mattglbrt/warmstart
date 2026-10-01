@@ -4,9 +4,9 @@ Append-only working record. **Newest entry first.** One entry per working sessio
 
 ---
 
-## {YYYY-MM-DD} — orient/wrap installed
+## {YYYY-MM-DD} — warmstart installed
 
-**Context:** Project set up with the orient/wrap session system.
+**Context:** Project set up with warmstart (/orient + /wrap).
 
 **What happened:** `CLAUDE.md`, `STATUS.md`, this log, and the `/orient` + `/wrap` commands were added.
 

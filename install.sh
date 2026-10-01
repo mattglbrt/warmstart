@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# orient-wrap installer.
+# warmstart installer.
 #
 #   bash install.sh <project-path> ["Project Name"]   set up one project (files + commands)
 #   bash install.sh --global                          install /orient + /wrap for every project (~/.claude/commands)
@@ -74,7 +74,7 @@ Done. Next:
   *)
     DEST="$1"; NAME="${2:-$(basename "$(cd "$DEST" 2>/dev/null && pwd || echo "$DEST")")}"
     mkdir -p "$DEST"
-    echo "Installing orient/wrap → $DEST ($NAME)"
+    echo "Installing warmstart → $DEST ($NAME)"
     put "$SRC/commands/orient.md" "$DEST/.claude/commands/orient.md"
     put "$SRC/commands/wrap.md"   "$DEST/.claude/commands/wrap.md"
 
