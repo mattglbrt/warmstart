@@ -4,7 +4,7 @@
 #   bash install.sh <project-path> ["Project Name"]   set up one project (files + commands)
 #   bash install.sh --global                          install /orient + /wrap for every project (~/.claude/commands)
 #   bash install.sh --orchestrator <workspace-root>   install the optional root/orchestrator layer
-#   bash install.sh --update-commands <path>          overwrite a project's orient/wrap with this version
+#   bash install.sh --update-commands <path>          overwrite a project's orient/wrap/intake with this version
 #
 # Idempotent: never overwrites an existing file (except --update-commands, which only touches the commands).
 set -euo pipefail
@@ -40,14 +40,15 @@ case "$1" in
     echo "Installing /orient + /wrap for all projects → $DEST"
     put "$SRC/commands/orient.md" "$DEST/orient.md"
     put "$SRC/commands/wrap.md"   "$DEST/wrap.md"
-    echo "Done. Per-project files (STATUS.md etc.) still come from: bash install.sh <project-path>"
+    echo "Done. Per-project files (STATUS.md etc.) and /intake still come from: bash install.sh <project-path>
+(/intake stays per-project so it can't collide with the orchestrator's /intake at a workspace root.)"
     ;;
 
   --update-commands)
     [ $# -ge 2 ] || usage
     DEST="$2/.claude/commands"; mkdir -p "$DEST"
-    cp "$SRC/commands/orient.md" "$SRC/commands/wrap.md" "$DEST/"
-    echo "Updated orient.md + wrap.md in $DEST"
+    cp "$SRC/commands/orient.md" "$SRC/commands/wrap.md" "$SRC/commands/intake.md" "$DEST/"
+    echo "Updated orient.md + wrap.md + intake.md in $DEST"
     ;;
 
   --orchestrator)
@@ -77,6 +78,7 @@ Done. Next:
     echo "Installing warmstart → $DEST ($NAME)"
     put "$SRC/commands/orient.md" "$DEST/.claude/commands/orient.md"
     put "$SRC/commands/wrap.md"   "$DEST/.claude/commands/wrap.md"
+    put "$SRC/commands/intake.md" "$DEST/.claude/commands/intake.md"
 
     if [ -e "$DEST/claude.md" ] && [ ! -e "$DEST/CLAUDE.md" ]; then
       echo "  exists, left alone: $DEST/claude.md"
@@ -101,6 +103,7 @@ Done. Next:
 Done. Next:
   1. Fill in $DEST/CLAUDE.md — durable facts only (what, stack, commands, conventions).
      If CLAUDE.md already existed, add the 'Session workflow' footer from templates/CLAUDE.project.md.
-  2. Start Claude Code in $DEST and run /orient. End every session with /wrap."
+  2. Start Claude Code in $DEST and run /orient. End every session with /wrap.
+  3. After a meeting, paste the notes and run /intake (or drop them in $DEST/inbox/)."
     ;;
 esac

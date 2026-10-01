@@ -41,6 +41,8 @@ Templates for all of these are in `templates/`.
 5. Compact the log if it's over ~50KB.
 6. Run the project's wrap extras.
 
+**After a meeting — `/intake`:** paste the notes or drop them in `inbox/`. It extracts decisions, actions, deadlines, blockers, asks of you, and open questions, quoting the note and marking inferences. It files the note as `meetings/YYYY-MM-DD-<slug>.md` (summary on top, raw text verbatim below) and folds the changes into STATUS.md. It offers `HANDOFF.md` files for any other projects the note touches. Meeting notes are evidence: names, dates, and numbers stay exactly as written, and nothing becomes "done" because it was discussed. If a note conflicts with STATUS.md, the note wins for what happened.
+
 ## 4. Status discipline
 
 STATUS.md has five sections:
@@ -71,7 +73,7 @@ Run `/weekly` from the workspace root (orchestrator layer), or do it by hand:
 bash install.sh <path-to-project> ["Project Name"]
 ```
 
-It creates `CLAUDE.md`, `STATUS.md`, `SESSION_LOG.md`, and `.claude/commands/{orient,wrap}.md`. It never overwrites a file that already exists. After that:
+It creates `CLAUDE.md`, `STATUS.md`, `SESSION_LOG.md`, and `.claude/commands/{orient,wrap,intake}.md`. It never overwrites a file that already exists. After that:
 1. Fill in CLAUDE.md with durable facts only.
 2. Add a row to `PROJECTS.md` if you keep a board.
 3. Set up `.gitignore` before the first commit: `.env*`, logs, raw data, `.claude/settings.local.json`.

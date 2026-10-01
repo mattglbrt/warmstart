@@ -2,7 +2,7 @@
 
 **Every Claude Code session picks up exactly where the last one left off.**
 
-A session system for [Claude Code](https://claude.com/claude-code). It uses two slash commands (`/orient`, `/wrap`) and three plain markdown files, so every session starts knowing where the project is and ends leaving it better documented than it found it. It needs no API key, no service, and no setup beyond copying a few files.
+A session system for [Claude Code](https://claude.com/claude-code). It uses two slash commands (`/orient`, `/wrap`), three plain markdown files, and an `/intake` command that turns meeting notes into project state, so every session starts knowing where the project is and ends leaving it better documented than it found it. It needs no API key, no service, and no setup beyond copying a few files.
 
 ```
 /orient   →   work   →   /wrap
@@ -43,6 +43,22 @@ It ends by handing you the ranked Next list.
 
 > A session that ends without a wrap is a session the next one pays for.
 
+## Meeting notes → project state: `/intake`
+
+Most project changes don't happen in the code. They happen on a call. `/intake` makes sure those decisions land in the project instead of in a notebook.
+
+After a meeting, paste your notes (rough is fine), or drop a file in the project's `inbox/`, and run `/intake`. It:
+
+- **extracts** decisions, actions (who / what / by when), deadlines, blockers, asks of you, and open questions. It quotes the note, marks inferences "(inferred)", and never marks anything done just because it was discussed.
+- **files** a clean copy at `meetings/YYYY-MM-DD-<slug>.md`: the structured summary on top, your raw notes verbatim underneath.
+- **updates STATUS.md**, so the next `/orient` already knows what the client said.
+- **adds deadlines** to the board, if you keep one.
+- **offers handoffs** for any other projects the note touches. It writes a `HANDOFF.md` into each one only if you say yes.
+
+It ends with a short **"Needs you"** list.
+
+Running many projects? The orchestrator's version of `/intake` works from one shared `inbox/` at the workspace root and routes each note to the right project (see below).
+
 ## Install
 
 Requires bash: macOS, Linux, WSL, or Git Bash on Windows.
@@ -51,7 +67,7 @@ Requires bash: macOS, Linux, WSL, or Git Bash on Windows.
 git clone https://github.com/mattglbrt/warmstart.git
 cd warmstart
 
-# Set up a project (creates CLAUDE.md, STATUS.md, SESSION_LOG.md, .claude/commands/{orient,wrap}.md)
+# Set up a project (creates CLAUDE.md, STATUS.md, SESSION_LOG.md, .claude/commands/{orient,wrap,intake}.md)
 bash install.sh ~/code/my-project "My Project"
 ```
 
@@ -62,14 +78,14 @@ The installer never overwrites a file that already exists, so it's safe on exist
 ```bash
 bash install.sh --global                      # /orient + /wrap available in every project (~/.claude/commands)
 bash install.sh --orchestrator ~/code         # the optional management layer (see below)
-bash install.sh --update-commands ~/code/x    # push a newer orient/wrap into a project
+bash install.sh --update-commands ~/code/x    # push newer orient/wrap/intake into a project
 ```
 
-Then open Claude Code in the project and run `/orient`. End every session with `/wrap`.
+Then open Claude Code in the project and run `/orient`. End every session with `/wrap`. After meetings, run `/intake`.
 
 ## See it
 
-[`examples/bakery-site/`](examples/bakery-site/) is a small fictional project mid-flight. It has a STATUS.md, a session log, a CLAUDE.md with a wrap extra, and a HANDOFF.md waiting to be picked up. Copy the folder somewhere, start Claude Code in it, and run `/orient`.
+[`examples/bakery-site/`](examples/bakery-site/) is a small fictional project mid-flight. It has a STATUS.md, a session log, a CLAUDE.md with a wrap extra, a filed meeting note, a HANDOFF.md waiting to be picked up, and a raw call note sitting in `inbox/`. Copy the folder somewhere, start Claude Code in it, run `/orient`, then run `/intake` and watch the call note turn into STATUS changes.
 
 ## Wrap extras
 
@@ -99,7 +115,7 @@ workspace/
 - **Groups** (a client, a product line) get their own CLAUDE.md and a one-page rollup STATUS.md. Claude Code loads the CLAUDE.md chain automatically, so shared rules live in one place.
 - **The board** (`PROJECTS.md`) has one row per project, plus a deadlines table. `/wrap` keeps your row current.
 - **The orchestrator** is a Claude Code session started at the workspace root. It manages and doesn't build:
-  - **`/intake`** — drop meeting notes in `inbox/`. It files them, updates the STATUS files and the board, and writes a `HANDOFF.md` into each affected project. The next session in that project picks the handoff up on `/orient`.
+  - **`/intake`** — drop meeting notes for *any* project in the root `inbox/`. It works out which project each note belongs to, files it, updates the STATUS files and the board, and writes a `HANDOFF.md` into each affected project. The next session in that project picks the handoff up on `/orient`.
   - **`/pulse`** — a 60-second read-only status: what's due, who's blocking what, and what's stale.
   - **`/weekly`** — the Friday review across everything.
   - **`/brief <group>`** — meeting prep.
@@ -121,10 +137,10 @@ The full reasoning is in [PLAYBOOK.md](PLAYBOOK.md).
 ## What's in here
 
 ```
-commands/              orient.md, wrap.md — the two project commands
+commands/              orient.md, wrap.md, intake.md — the project commands
 orchestrator/          CLAUDE.md + intake, pulse, weekly, brief, followup (optional root layer)
 templates/             CLAUDE.project.md, CLAUDE.group.md, STATUS.md, SESSION_LOG.md,
-                       HANDOFF.md, PROJECTS.md, RECURRING.md, WEEKLY_REVIEW.md
+                       HANDOFF.md, MEETING_NOTE.md, PROJECTS.md, RECURRING.md, WEEKLY_REVIEW.md
 examples/bakery-site/  a worked example
 install.sh             the installer
 PLAYBOOK.md            the full system
