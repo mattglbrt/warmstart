@@ -113,7 +113,7 @@ The division of labor: **the orchestrator manages, project sessions build.** Kee
 
 Every project has its own end-of-day chores. Put them in a `## Wrap extras` section of the project's CLAUDE.md instead of forking `wrap.md`. Examples from real use:
 - Run `docker ps` and stop this project's containers unless something outside the session depends on them. Ask if unsure.
-- Update this project's card in a personal dashboard's `data.json`, then rebuild it.
+- Rebuild a personal dashboard that reads every project's STATUS.md (so STATUS is the only thing to update), and add any changed deadline to its data file.
 - Commit the session's work with a `Wrap YYYY-MM-DD: …` message.
 
 ## 11. Maintaining the system

@@ -22,7 +22,7 @@
 ## Wrap extras
 <!-- Optional. Project-specific steps /wrap should run at the end of every session. Delete the section if you don't need it. Examples:
 - Run `docker ps`; stop this project's containers unless something outside the session needs them.
-- Update this project's card in ~/dashboard/data.json and rebuild.
+- Rebuild a dashboard that reads STATUS.md (e.g. node ~/dashboard/build.mjs); add any changed deadline to its data file first.
 -->
 
 ---
